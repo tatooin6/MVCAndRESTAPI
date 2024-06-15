@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace WebAPIAutores
 {
     public class Startup
@@ -13,6 +15,10 @@ namespace WebAPIAutores
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddDbContext<ApplicationDbContext>(options => 
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
