@@ -1,4 +1,6 @@
+using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebAPIAutores.Entities;
 
 namespace WebAPIAutores.Controllers
@@ -7,13 +9,25 @@ namespace WebAPIAutores.Controllers
     [Route("api/authors")]
     public class AuthorsController: ControllerBase
     {
-        [HttpGet]
-        public ActionResult<List<Author>> Get()
+        private readonly ApplicationDbContext context;
+        public AuthorsController(ApplicationDbContext context)
         {
-            return new List<Author>() {
-                new Author() { Id = 1, Name = "Tato" },
-                new Author() { Id = 2, Name = "Canela" }
-            };
-        }       
+            this.context = context;
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult<List<Author>>> Get()
+        {
+            return await context.Authors.ToListAsync();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Post(Author author)
+        {
+            context.Add(author);
+            await context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }
