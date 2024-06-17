@@ -11,5 +11,6 @@ namespace WebAPIAutores
 
         // Create a table with <Author> entity schema and name it Authors
         public DbSet<Author> Authors { get; set; }
+        public DbSet<Book> Books { get; set; }
     }
 }
