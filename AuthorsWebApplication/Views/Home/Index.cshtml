@@ -1,0 +1,38 @@
+﻿@using WebAPIAutores.Entities
+@{
+    ViewData["Title"] = "Home Page";
+}
+@model IEnumerable<WebAPIAutores.Entities.Book>
+
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <h2>Books</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model)
+            {
+                <tr>
+                    <td>@book.Title</td>
+                    <td>@book.Author.Name</td>
+                    <td>
+                        <a href="@Url.Action("Edit", "Books", new { id = book.Id })">Edit</a> |
+                        <a href="@Url.Action("Delete", "Books", new { id = book.Id })">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a href="@Url.Action("Create", "Books")">Add New Book</a>
+</div>
+
+<partial name="_ValidationScriptsPartial" />
