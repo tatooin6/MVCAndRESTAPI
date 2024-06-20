@@ -15,6 +15,14 @@ namespace WebAPIAutores.Controllers
             this.context = context;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<List<Book>>> Get()
+        {
+            return await context.Books
+                .Include(book => book.Author)
+                .ToListAsync();
+        }
+
         [HttpGet("{urlId:int}")]
         public async Task<ActionResult<Book>> Get(int urlId)
         { 
