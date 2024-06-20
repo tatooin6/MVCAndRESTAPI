@@ -15,7 +15,7 @@ namespace AuthorsWebApplication.Services
 
         public async Task<List<Book>> GetBooksAsync()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "api/books");
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:7277/api/books");
             var client = _clientFactory.CreateClient("MyApiClient");
 
             HttpResponseMessage response = await client.SendAsync(request);
