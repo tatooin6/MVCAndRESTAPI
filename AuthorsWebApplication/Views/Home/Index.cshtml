@@ -6,10 +6,8 @@
 
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Books</h1>
 
-    <h2>Books</h2>
     <table class="table">
         <thead>
             <tr>
@@ -19,20 +17,28 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var book in Model)
+            @if (Model != null && Model.Any())
+            {  
+                @foreach (var book in Model)
+                {
+                    <tr>
+                        <td>@book.Title</td>
+                        <td>@book.Author.Name</td>
+                        <td>
+                            <a href="@Url.Action("Edit", "Books", new { id = book.Id })">Edit</a> |
+                            <a href="@Url.Action("Delete", "Books", new { id = book.Id })">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
-                <tr>
-                    <td>@book.Title</td>
-                    <td>@book.Author.Name</td>
-                    <td>
-                        <a href="@Url.Action("Edit", "Books", new { id = book.Id })">Edit</a> |
-                        <a href="@Url.Action("Delete", "Books", new { id = book.Id })">Delete</a>
-                    </td>
-                </tr>
+                <p>No data available to display.</p>
             }
         </tbody>
     </table>
     <a href="@Url.Action("Create", "Books")">Add New Book</a>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 
 <partial name="_ValidationScriptsPartial" />
