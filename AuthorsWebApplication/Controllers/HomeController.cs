@@ -33,7 +33,21 @@ namespace AuthorsWebApplication.Controllers
         {
             //var books = await GetBooks();
             var books = await _apiService.GetBooksAsync();
+            if (books == null)
+            {
+                books = new List<Book>();
+            }
             return View(books);
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var book = await _apiService.GetBookAsync(id);
+            return View(book);
         }
 
         public IActionResult Privacy()
