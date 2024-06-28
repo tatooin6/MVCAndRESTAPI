@@ -20,6 +20,18 @@ namespace WebAPIAutores
                 .AddJsonOptions(option => 
                     option.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+            services
+                .AddCors(options =>
+                {
+                    options.AddPolicy("AllowAllOrigins",
+                        builder =>
+                        {
+                            builder.AllowAnyOrigin()
+                                   .AllowAnyMethod()
+                                   .AllowAnyHeader();
+                        });
+                });
+
             services.AddDbContext<ApplicationDbContext>(options => 
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 

@@ -22,13 +22,6 @@ namespace AuthorsWebApplication.Controllers
             _apiService = apiService;
         }
 
-        // private async Task<IEnumerable<Book>> GetBooks()
-        // {
-        //     var url = "https://localhost:7277/api/books";
-        //     return await _httpClient
-        //         .GetFromJsonAsync<IEnumerable<Book>>(url);
-        // }
-
         public async Task<IActionResult> Index()
         {
             //var books = await GetBooks();
@@ -53,6 +46,33 @@ namespace AuthorsWebApplication.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        // Show Edit Form
+        [HttpGet]
+        public async Task<ActionResult> Edit(int id) {
+            var book = await _apiService.GetBookAsync(id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+            return View(book);
+        }
+
+        // Handle book update
+        [HttpPost]
+        public async Task<ActionResult> Edit(Book book) {
+            if (!ModelState.IsValid)
+            {
+                return View(book);
+            }
+
+            var updatedBook = await _apiService.UpdateBookASync(book, book.Id);
+            if (updatedBook != null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return View(book);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

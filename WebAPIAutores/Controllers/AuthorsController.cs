@@ -41,6 +41,7 @@ namespace WebAPIAutores.Controllers
             }
             
             context.Update(author);
+            // TODO: try catch this
             await context.SaveChangesAsync();
             return Ok();
         }

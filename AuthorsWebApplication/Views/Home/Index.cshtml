@@ -25,7 +25,7 @@
                         <td>@book.Title</td>
                         <td>@book.Author.Name</td>
                         <td>
-                            <a href="@Url.Action("Edit", "Books", new { id = book.Id })">Edit</a> |
+                            @Html.ActionLink("Edit", "Edit", new { id = book.Id }) |
                             @Html.ActionLink("Details", "Details", new { id = book.Id }) |
                             <a href="@Url.Action("Delete", "Books", new { id = book.Id })">Delete</a>
                         </td>
