@@ -46,5 +46,22 @@ namespace WebAPIAutores.Controllers
             await context.SaveChangesAsync();
             return Ok(book);
         }
+
+        [HttpPut("{id:int}")] // api/books/2
+        public async Task<ActionResult> Put(int id, [FromBody] Book bookDto)
+        {
+            var existingBook = await context.Books.FindAsync(id);
+            if (existingBook == null)
+            {
+                return NotFound($"Book with Id = {id} not found.");
+            }
+
+            existingBook.Title = bookDto.Title;
+
+            await context.SaveChangesAsync();
+
+            return Ok(existingBook);
+        }
+
     }
 }

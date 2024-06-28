@@ -6,7 +6,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddHttpClient("WebAPIAutores", client =>
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
+
+builder.Services.AddHttpClient<ApiService>(client =>
 {
     client.BaseAddress = new Uri("https://localhost:7277");
     client.DefaultRequestHeaders.Accept.Clear();
@@ -29,7 +40,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseCors("AllowAllOrigins");
 app.UseAuthorization();
 
 app.MapControllerRoute(

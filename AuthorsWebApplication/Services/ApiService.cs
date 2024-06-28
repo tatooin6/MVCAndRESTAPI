@@ -1,4 +1,6 @@
-﻿using WebAPIAutores.Entities;
+﻿using System.Text;
+using System.Text.Json;
+using WebAPIAutores.Entities;
 
 namespace AuthorsWebApplication.Services
 {
@@ -14,7 +16,7 @@ namespace AuthorsWebApplication.Services
             _logger = logger;
             this.client = _clientFactory.CreateClient("MyApiClient");
         }
-
+        
         public async Task<List<Book>> GetBooksAsync()
         {
             var request = new HttpRequestMessage(
@@ -52,6 +54,46 @@ namespace AuthorsWebApplication.Services
                 return null;
             }
         }
+
+        public async Task<Book> UpdateBookASync(Book book, int id)
+        {
+            var options = new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+            };
+            var jsonString = JsonSerializer.Serialize(book, options);
+            _logger.LogInformation($"Sending JSON: {jsonString}");
+            var request = new HttpRequestMessage(
+                HttpMethod.Put,
+                $"https://localhost:7277/api/books/{id}"
+            )
+            {
+                Content = new StringContent(jsonString, Encoding.UTF8, "application/json")
+            };
+
+            // handling response
+            try
+            {
+                HttpResponseMessage response = await this.client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<Book>();
+                }
+                else
+                {
+                    _logger.LogError($"Error updating book. Id:{id}");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception during update: {ex.Message}");
+                return null;
+            }
+        }
+
+
 
         // TODO: Implement other methods for POST, PUT, DELETE
     }
