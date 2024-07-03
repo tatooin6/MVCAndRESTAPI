@@ -93,8 +93,36 @@ namespace AuthorsWebApplication.Services
             }
         }
 
+        public async Task<Book> CreateBookAsync(Book book) {
+            var options = new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+            };
+            try
+            {
+                var response = await this.client
+                    .PostAsJsonAsync<Book>(
+                        "https://localhost:7277/api/books",
+                        book,
+                        options
+                    );
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<Book>();
+                }
+                else
+                {
+                    _logger.LogError($"Exception during book creation");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception during update: {ex.Message}");
+                return null;
+            }
+        }
 
-
-        // TODO: Implement other methods for POST, PUT, DELETE
+        // TODO: Implement other methods for DELETE
     }
 }

@@ -75,6 +75,27 @@ namespace AuthorsWebApplication.Controllers
             return View(book);
         }
 
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create(Book book) {
+            if (!ModelState.IsValid)
+            {
+                return View(book);
+            }
+
+            var createdBook = await _apiService.CreateBookAsync(book);
+            if (createdBook != null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return View(book);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
